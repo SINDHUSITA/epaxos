@@ -57,3 +57,6 @@ AUTHORS:
 Iulian Moraru, David G. Andersen -- Carnegie Mellon University
 
 Michael Kaminsky -- Intel Labs
+
+FORKED REPO & BRANCH:
+https://github.com/SINDHUSITA/epaxos/tree/paxos-no-batching
