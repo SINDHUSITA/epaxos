@@ -3,9 +3,13 @@ ClientIps=(10.10.1.6)
 MasterIp=10.10.1.3
 FirstServerPort=17070 # change it when only necessary (i.e., firewall blocking, port in use)
 NumOfServerInstances=5 # before recompiling, try no more than 5 servers. See Known Issue # 4
-NumOfClientInstances=20 #20,40,60,80,100,200,300,400,500
+NumOfClientInstances=20 #20, 10, 5, 2
 reqsNb=20000
-writes=50
+
+# For Nilext operations:
+# 1. writes = 0 for 100% reads
+# 2. writes = 100 for 100% writes
+writes=50 #non nilext
 dlog=false
 conflicts=0
 thrifty=false
