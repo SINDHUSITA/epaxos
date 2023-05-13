@@ -3,12 +3,12 @@ source ./base-profile.sh
 function prepareRun() {
     for ip in "${ServerIps[@]}"
     do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "mkdir -p ${LogFolder}; rm -rf ${LogFolder}/*; cd ${EPaxosFolder} && chmod 777 runEPaxos.sh" 2>&1
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "mkdir -p ${LogFolder}; rm -rf ${LogFolder}/*; cd ${EPaxosFolder} && chmod 777 runEPaxos.sh" 2>&1
         sleep 0.3
     done
     for ip in "${ClientIps[@]}"
     do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "mkdir -p ${LogFolder}; rm -rf ${LogFolder}/*; cd ${EPaxosFolder} && chmod 777 runEPaxos.sh" 2>&1
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "mkdir -p ${LogFolder}; rm -rf ${LogFolder}/*; cd ${EPaxosFolder} && chmod 777 runEPaxos.sh" 2>&1
         sleep 0.3
     done
     wait
@@ -52,7 +52,7 @@ function runServersAllMachines() {
     MachineIdx=0
     for ip in "${ServerIps[@]}"
     do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "cd ${EPaxosFolder} && EPScriptOption=StartServers EPMachineIdx=${MachineIdx} /bin/bash runEPaxos.sh" 2>&1 &
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "cd ${EPaxosFolder} && EPScriptOption=StartServers EPMachineIdx=${MachineIdx} /bin/bash runEPaxos.sh" 2>&1 &
         sleep 0.3
         ((MachineIdx++))
     done
@@ -62,7 +62,7 @@ function runClientsAllMachines() {
     MachineIdx=0
     for ip in "${ClientIps[@]}"
     do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "cd ${EPaxosFolder} && EPScriptOption=StartClients EPMachineIdx=${MachineIdx} /bin/bash runEPaxos.sh" 2>&1 &
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "cd ${EPaxosFolder} && EPScriptOption=StartClients EPMachineIdx=${MachineIdx} /bin/bash runEPaxos.sh" 2>&1 &
         sleep 0.3
         ((MachineIdx++))
     done
@@ -91,19 +91,19 @@ function SendEPaxosFolder() {
 function SSHCheckClientProgress() {
     for ip in "${ClientIps[@]}"
     do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "ps -fe | grep bin/client" 2>&1 &
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "ps -fe | grep bin/client" 2>&1 &
     done
 }
 
 function EpKillAll() {
     for ip in "${ServerIps[@]}"
     do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "cd ${EPaxosFolder} && chmod 777 kill.sh && /bin/bash kill.sh" 2>&1 &
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "cd ${EPaxosFolder} && chmod 777 kill.sh && /bin/bash kill.sh" 2>&1 &
         sleep 0.3
     done
     for ip in "${ClientIps[@]}"
     do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "cd ${EPaxosFolder} && chmod 777 kill.sh && /bin/bash kill.sh" 2>&1 &
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "cd ${EPaxosFolder} && chmod 777 kill.sh && /bin/bash kill.sh" 2>&1 &
         sleep 0.3
     done
     wait
@@ -120,7 +120,7 @@ function DownloadLogs() {
 
     for ip in "${ClientIps[@]}"
     do
-        scp -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip":${LogFolder}/*.out ${LogFolder} 2>&1 &
+        scp -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip":${LogFolder}/*.out ${LogFolder} 2>&1 &
         sleep 0.3
     done
 }
@@ -128,13 +128,15 @@ function DownloadLogs() {
 function RemoveLogs(){
   for ip in "${ClientIps[@]}"
   do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "rm -rf ${LogFolder}/*" 2>&1 &
+	echo "${ip}"
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "rm -rf ${LogFolder}/*" 2>&1 &
         sleep 0.3
   done
 
   for ip in "${ServerIps[@]}"
   do
-        ssh -o StrictHostKeyChecking=no -i ${SSHKey} root@"$ip" "rm -rf ${LogFolder}/*" 2>&1 &
+	echo "${ip}"
+        ssh -o StrictHostKeyChecking=no -i ${SSHKey} sa84@"$ip" "rm -rf ${LogFolder}/*" 2>&1 &
         sleep 0.3
   done
 }
@@ -166,8 +168,14 @@ function Main() {
 #prepareRun;
 RemoveLogs
 wait
+echo "Starting Server Setup"
 Main
+echo "Completed Server Setup"
 wait
+echo "Starting Download Logs"
 DownloadLogs
+echo "Completed Download Logs"
 wait
+echo "Starting Kill"
 EpKillAll
+echo "Completed Kill"

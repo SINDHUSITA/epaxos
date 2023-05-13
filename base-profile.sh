@@ -1,9 +1,9 @@
-ServerIps=(10.10.1.1 10.10.1.3 10.10.1.5) # 3
-ClientIps=(10.10.1.2)
-MasterIp=10.10.1.1
+ServerIps=(10.10.1.3 10.10.1.1 10.10.1.2 10.10.1.4 10.10.1.5) # 5
+ClientIps=(10.10.1.6)
+MasterIp=10.10.1.3
 FirstServerPort=17070 # change it when only necessary (i.e., firewall blocking, port in use)
-NumOfServerInstances=3 # before recompiling, try no more than 5 servers. See Known Issue # 4
-NumOfClientInstances=2 #20,40,60,80,100,200,300,400,500
+NumOfServerInstances=5 # before recompiling, try no more than 5 servers. See Known Issue # 4
+NumOfClientInstances=20 #20,40,60,80,100,200,300,400,500
 reqsNb=20000
 writes=50
 dlog=false
@@ -17,6 +17,6 @@ rounds=$((reqsNb / clientBatchSize))
 #rounds=1 # open-loop
 
 # some constants
-SSHKey=/root/go/src/rabia/deployment/install/id_rsa # RC project has it
-EPaxosFolder=/root/go/src/epaxos # where the epaxos' bin folder is located
-LogFolder=/root/go/src/epaxos/logs
+SSHKey=~/go/src/rabia/deployment/install/id_rsa # RC project has it
+EPaxosFolder=~/go/src/epaxos # where the epaxos' bin folder is located
+LogFolder=~/go/src/epaxos/logs
